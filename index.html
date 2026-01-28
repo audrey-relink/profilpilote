@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic Parcours Client — Relink | Profil Piloté</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts: Poppins & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --relink-blue: #20178d;
+            --relink-coral: #e55e5b;
+            --relink-black: #000000;
+            --relink-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--relink-bg);
+            color: var(--relink-black);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            height: 400px;
+        }
+
+        .relink-logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--relink-black);
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.05em;
+        }
+        .relink-dot {
+            color: var(--relink-coral);
+            margin-left: -0.1em;
+            margin-top: -0.4em;
+        }
+
+        .btn-toggle {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slider-thumb {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 10px;
+            outline: none;
+        }
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--relink-coral);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .card-relink {
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        .card-relink:hover {
+            border-color: var(--relink-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(32, 23, 141, 0.08);
+        }
+
+        .btn-cta {
+            background-color: var(--relink-blue);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-cta:hover {
+            background-color: var(--relink-black);
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="border-b border-gray-100 py-4 bg-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="relink-logo">
+                relink<span class="relink-dot">.</span>
+            </div>
+            <div class="hidden md:block">
+                <a href="https://link.crococlick.com/widget/bookings/appel-decouverte-relink" target="_blank" class="btn-cta px-6 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-widest shadow-lg">
+                    Réserver mon audit gratuit
+                </a>
+            </div>
+            <div class="md:hidden text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                Analyse Stratégique
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="py-24 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-16">
+                <div class="max-w-2xl">
+                    <div class="inline-block px-4 py-1.5 bg-gray-100 rounded-full text-[11px] font-bold tracking-widest uppercase mb-8">Profil : Piloté</div>
+                    <h1 class="text-6xl md:text-8xl mb-8 text-black leading-[0.9]">La machine est lancée<span class="text-[#e55e5b]">.</span></h1>
+                    <p class="text-xl text-gray-600 leading-relaxed mb-8 font-light">
+                        Votre entreprise a dépassé le stade de l'artisanat. Aujourd'hui, vous avez des <strong>fondations solides</strong> : vos équipes savent quoi faire et vos outils sont en place. 
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2 text-sm font-semibold">
+                            <i class="fas fa-check text-[#e55e5b]"></i> Structure stable
+                        </div>
+                        <div class="flex items-center gap-2 text-sm font-semibold">
+                            <i class="fas fa-check text-[#e55e5b]"></i> Processus clairs
+                        </div>
+                        <div class="flex items-center gap-2 text-sm font-semibold">
+                            <i class="fas fa-check text-[#e55e5b]"></i> Équipe autonome
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 bg-[#20178d] text-white p-12 rounded-[40px] rotate-2 shadow-2xl relative">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-[#e55e5b] rounded-full flex items-center justify-center text-xl font-bold">!</div>
+                    <div class="text-sm uppercase tracking-widest opacity-60 mb-2">Note globale</div>
+                    <div class="text-8xl font-bold mb-4 tracking-tighter">3.08</div>
+                    <div class="h-1.5 w-24 bg-[#e55e5b] mb-6"></div>
+                    <p class="text-sm leading-snug opacity-90 max-w-[200px]">
+                        C'est une excellente note. Votre défi n'est plus de construire, mais d'<strong>optimiser</strong> pour ne pas s'essouffler.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section: Radar Chart Deep Dive -->
+    <section class="py-24 bg-gray-50 border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-12 gap-16 items-center">
+                <div class="lg:col-span-5">
+                    <h2 class="text-4xl mb-6">L'équilibre de votre moteur</h2>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        Chaque branche représente un pilier de votre relation client. Votre profil montre une <strong>maîtrise du cadre</strong>, mais révèle quelques zones de friction où l'énergie se perd.
+                    </p>
+                    
+                    <div class="space-y-8">
+                        <div class="p-6 bg-white rounded-2xl border-l-4 border-[#20178d] shadow-sm">
+                            <h4 class="font-bold text-sm uppercase tracking-widest mb-2 text-[#20178d]">Le point fort</h4>
+                            <p class="text-sm text-gray-700"><strong>La visibilité :</strong> Vous ne pilotez pas à l'aveugle. Vous avez des chiffres et une vision claire de vos étapes de vente.</p>
+                        </div>
+                        <div class="p-6 bg-white rounded-2xl border-l-4 border-[#e55e5b] shadow-sm">
+                            <h4 class="font-bold text-sm uppercase tracking-widest mb-2 text-[#e55e5b]">Le point de vigilance</h4>
+                            <p class="text-sm text-gray-700"><strong>La fluidité :</strong> Les outils sont là, mais les passages d'une étape à l'autre créent encore des doubles saisies ou des lenteurs.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-7 bg-white p-12 rounded-3xl shadow-inner border border-gray-200">
+                    <div class="chart-container">
+                        <canvas id="relinkRadar"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Detailed Dashboard -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl mb-4">Analyse détaillée du terrain</h2>
+                <p class="text-gray-500 text-lg">Pour avancer, il faut savoir ce qui nous porte et ce qui nous retient. Voici la réalité de votre organisation aujourd'hui.</p>
+            </div>
+
+            <div class="flex justify-center gap-4 mb-12">
+                <button onclick="switchView('assets')" id="btn-assets" class="btn-toggle px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-[#20178d] text-white shadow-lg">
+                    <i class="fas fa-rocket mr-2"></i> Vos leviers de croissance
+                </button>
+                <button onclick="switchView('risks')" id="btn-risks" class="btn-toggle px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-gray-100 text-gray-400 hover:bg-gray-200">
+                    <i class="fas fa-anchor mr-2"></i> Vos freins actuels
+                </button>
+            </div>
+
+            <div id="grid-content" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-500">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Strategic Call to Action -->
+    <section class="py-24 bg-[#000000] text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 opacity-10 pointer-events-none">
+            <h1 class="text-[300px] leading-none -mr-32 -mt-16">RELINK</h1>
+        </div>
+        
+        <div class="max-w-5xl mx-auto px-6 relative z-10">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-5xl mb-8 leading-tight">Passer du contrôle à la <span class="text-[#e55e5b]">liberté.</span></h2>
+                    <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+                        Aujourd'hui, votre structure consomme de l'énergie pour se maintenir. En simplifiant vos processus, vous libérez du temps pour ce qui compte vraiment : <strong>vos clients et votre stratégie.</strong>
+                    </p>
+                    <div class="mb-8">
+                        <a href="https://link.crococlick.com/widget/bookings/appel-decouverte-relink" target="_blank" class="inline-block bg-[#e55e5b] text-white px-8 py-4 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-white hover:text-black transition-all">
+                            Réserver mon audit gratuit <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                    <div class="p-6 bg-white/5 border border-white/10 rounded-2xl">
+                        <h4 class="text-[#e55e5b] font-bold text-xs uppercase tracking-[0.2em] mb-4">Le conseil de l'expert</h4>
+                        <p class="text-sm italic">"Ne cherchez pas à ajouter un nouvel outil. Cherchez d'abord à supprimer deux étapes manuelles inutiles dans votre CRM actuel."</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white/5 p-10 rounded-3xl border border-white/10 backdrop-blur-sm">
+                    <h3 class="text-xl mb-8 text-center">Simulez votre équilibre idéal</h3>
+                    <div class="flex justify-between text-[10px] font-bold uppercase tracking-[0.3em] mb-6">
+                        <span>Fluidité</span>
+                        <span>Contrôle</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="75" class="slider-thumb mb-10" id="eqSlider" oninput="updateEq(this.value)">
+                    <div id="eqFeedback" class="text-center h-20 flex items-center justify-center border-t border-white/10 pt-4">
+                        <!-- JS Feedback -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+            <div>
+                <div class="relink-logo mb-2 justify-center md:justify-start">
+                    relink<span class="relink-dot">.</span>
+                </div>
+                <p class="text-gray-400 text-xs">Diagnostic personnalisé — Janvier 2026</p>
+            </div>
+            
+            <div class="flex flex-col items-center md:items-end gap-4">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Prêt pour l'étape suivante ?</p>
+                <a href="https://link.crococlick.com/widget/bookings/appel-decouverte-relink" target="_blank" class="btn-cta px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl">
+                    Réserver mon audit gratuit
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const data = {
+            assets: [
+                { 
+                    title: "Le parcours est tracé", 
+                    desc: "Toutes les étapes, de la découverte du prospect à la signature, sont identifiées. Personne ne se demande 'c'est quoi la suite ?'.", 
+                    icon: "fa-map-marked-alt" 
+                },
+                { 
+                    title: "Autonomie de l'équipe", 
+                    desc: "Vos collaborateurs sont formés et savent utiliser les outils. L'entreprise peut tourner plusieurs jours sans votre intervention.", 
+                    icon: "fa-users" 
+                },
+                { 
+                    title: "Qualité constante", 
+                    desc: "Peu importe qui gère le dossier, le client reçoit le même niveau d'attention. Votre image de marque est protégée.", 
+                    icon: "fa-certificate" 
+                },
+                { 
+                    title: "Mesure du succès", 
+                    desc: "Vous avez des tableaux de bord. Vous savez combien de prospects entrent et combien sortent signés.", 
+                    icon: "fa-chart-line" 
+                },
+                { 
+                    title: "Outils alignés", 
+                    desc: "Vos logiciels ne sont plus des ennemis. Ils sont configurés pour soutenir votre manière de travailler.", 
+                    icon: "fa-cogs" 
+                },
+                { 
+                    title: "Patrimoine sécurisé", 
+                    desc: "L'historique des échanges est centralisé. Si un commercial part, son savoir et ses contacts restent chez vous.", 
+                    icon: "fa-shield-alt" 
+                }
+            ],
+            risks: [
+                { 
+                    title: "L'enclume du passé", 
+                    desc: "Vous traînez des outils ou des fichiers Excel 'historiques' qui ne servent plus mais que personne n'ose supprimer.", 
+                    icon: "fa-weight-hanging" 
+                },
+                { 
+                    title: "La saisie manuelle", 
+                    desc: "Il reste encore trop d'endroits où l'équipe doit retaper la même information. C'est du temps volé à la vente.", 
+                    icon: "fa-keyboard" 
+                },
+                { 
+                    title: "Le manque d'agilité", 
+                    desc: "Votre structure est tellement cadrée qu'il est devenu difficile de tester une nouvelle idée rapidement.", 
+                    icon: "fa-clock" 
+                },
+                { 
+                    title: "Dépendance aux outils", 
+                    desc: "Si un logiciel tombe en panne ou bug, toute la chaîne s'arrête car il n'y a plus de flexibilité humaine.", 
+                    icon: "fa-unplugged" 
+                },
+                { 
+                    title: "Complexité d'intégration", 
+                    desc: "Accueillir un nouveau collaborateur devient long : il y a trop de processus à apprendre avant d'être efficace.", 
+                    icon: "fa-puzzle-piece" 
+                },
+                { 
+                    title: "Perte de spontanéité", 
+                    desc: "À force de tout piloter, on risque de perdre le côté humain et chaleureux qui faisait votre force au début.", 
+                    icon: "fa-heart-break" 
+                }
+            ]
+        };
+
+        function switchView(view) {
+            const grid = document.getElementById('grid-content');
+            const btnAssets = document.getElementById('btn-assets');
+            const btnRisks = document.getElementById('btn-risks');
+            
+            grid.style.opacity = '0';
+            grid.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                grid.innerHTML = '';
+                const items = data[view];
+                const isRisk = view === 'risks';
+                
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "card-relink bg-white p-8 rounded-2xl";
+                    card.innerHTML = `
+                        <div class="w-14 h-14 flex items-center justify-center rounded-xl mb-6 ${isRisk ? 'bg-[#e55e5b]/10 text-[#e55e5b]' : 'bg-[#20178d]/10 text-[#20178d]'}">
+                            <i class="fas ${item.icon} text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-4 uppercase tracking-tight leading-tight">${item.title}</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">${item.desc}</p>
+                    `;
+                    grid.appendChild(card);
+                });
+                
+                grid.style.opacity = '1';
+                grid.style.transform = 'translateY(0)';
+                
+                if(view === 'assets') {
+                    btnAssets.className = "btn-toggle px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-[#20178d] text-white shadow-lg";
+                    btnRisks.className = "btn-toggle px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-gray-100 text-gray-400 hover:bg-gray-200";
+                } else {
+                    btnRisks.className = "btn-toggle px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-[#e55e5b] text-white shadow-lg";
+                    btnAssets.className = "btn-toggle px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-gray-100 text-gray-400 hover:bg-gray-200";
+                }
+            }, 300);
+        }
+
+        function updateEq(val) {
+            const feedback = document.getElementById('eqFeedback');
+            if(val > 80) {
+                feedback.innerHTML = '<div class="text-sm text-[#e55e5b] uppercase font-bold tracking-widest">Alerte Rigidité : Vous risquez de décourager vos talents par trop de contrôle.</div>';
+            } else if (val < 40) {
+                feedback.innerHTML = '<div class="text-sm text-[#e55e5b] uppercase font-bold tracking-widest">Alerte Chaos : Votre organisation devient trop floue pour être efficace.</div>';
+            } else {
+                feedback.innerHTML = '<div class="text-sm text-white uppercase font-bold tracking-widest">Équilibre Relink : C\'est ici que vous décuplez votre croissance.</div>';
+            }
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('relinkRadar').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['STRATÉGIE', 'LOGICIELS', 'COLLABORATEURS', 'FLUIDITÉ', 'DONNÉES', 'EXPÉRIENCE CLIENT'],
+                    datasets: [{
+                        label: 'Votre Score',
+                        data: [92, 88, 70, 60, 82, 75],
+                        backgroundColor: 'rgba(32, 23, 141, 0.15)',
+                        borderColor: '#20178d',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#e55e5b',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 8,
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            grid: { color: '#eee' },
+                            angleLines: { color: '#eee' },
+                            pointLabels: {
+                                font: { family: 'Poppins', size: 10, weight: '800' },
+                                color: '#999'
+                            },
+                            ticks: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        window.onload = () => {
+            initChart();
+            switchView('assets');
+            updateEq(75);
+        };
+    </script>
+</body>
+</html>
